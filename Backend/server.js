@@ -149,6 +149,7 @@ const servResponse = (req, res) => {
 
 const server = http.createServer((req, res) => {
   // przesyłanie konkretnych plików do klienta
+  res.setHeader("Access-Control-Allow-Origin", "*");
   switch (req.method) {
     case 'GET':
       // dostajemy żądanie w którym każda spacja jest zamieniona na %20 więc odwracamy to
