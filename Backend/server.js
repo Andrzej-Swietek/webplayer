@@ -1,7 +1,6 @@
 const PORT = 3000;
 const http = require('http');
 const fs = require('fs');
-
 const qs = require('querystring');
 
 // inicjacja obiektu z danymi muzycznymi
@@ -65,6 +64,7 @@ fs.readdir(__dirname + '/static/mp3/', (err, dirs) => {
 
 // obsługa zapytania POST
 const servResponse = (req, res) => {
+  console.log(req.method + req.url)
   let allData = '';
 
   // zbieranie fragmentów danych
@@ -76,26 +76,30 @@ const servResponse = (req, res) => {
     const finish = qs.parse(allData);
 
     res.writeHead(200, { 'Content-Type': 'text/plain;charset=utf-8' });
-
+    console.log(finish)
     if (finish.coversRequest) {
       // WYSYŁANIE OKŁADEK
       res.end(JSON.stringify(musicObject.covers));
-    } else if (finish.albumName) {
+    }
+    else if (finish.albumName) {
       // WYSYŁANIE LISTY Z ALBUMEM
       if (finish.albumName == 'first') {
         // jeśli jest to pierwsze żądanie to wysyłamy pierwszy folder do użytkownika
         readAlbum(musicObject.dirs[0]).then(tracks => {
           res.end(JSON.stringify(tracks));
         });
-      } else if (finish.albumName == 'playlist') {
+      }
+      else if (finish.albumName == 'playlist') {
         res.end(JSON.stringify(musicObject.playlist));
-      } else {
+      }
+      else {
         // w przeciwnym razie wysyłamy mu to co sobie zażyczył
         readAlbum(finish.albumName).then(tracks => {
           res.end(JSON.stringify(tracks));
         });
       }
-    } else if (finish.updateListening) {
+    }
+    else if (finish.updateListening) {
       const albumName = finish.listeningAlbumName;
       if (albumName == 'playlist') {
         musicObject.currentListen = musicObject.playlist;
@@ -105,7 +109,8 @@ const servResponse = (req, res) => {
         musicObject.currentListen = tracks;
         res.end('aktualizacja aktywnego albumu');
       });
-    } else if (finish.changeSong) {
+    }
+    else if (finish.changeSong) {
       const current = finish.currentSong;
       let currentIndex = musicObject.currentListen.findIndex(song => song.name == current);
       if (finish.returnSong == 'prev') {
@@ -128,7 +133,8 @@ const servResponse = (req, res) => {
           res.end('#');
         }
       }
-    } else if (finish.addToPlaylist) {
+    }
+    else if (finish.addToPlaylist) {
       const { album, name, size } = finish;
 
       // sprawdzanie czy piosenka nie jest już w playliście
@@ -150,6 +156,7 @@ const servResponse = (req, res) => {
 const server = http.createServer((req, res) => {
   // przesyłanie konkretnych plików do klienta
   res.setHeader("Access-Control-Allow-Origin", "*");
+
   switch (req.method) {
     case 'GET':
       // dostajemy żądanie w którym każda spacja jest zamieniona na %20 więc odwracamy to
@@ -218,6 +225,7 @@ const server = http.createServer((req, res) => {
 
     case 'POST':
       servResponse(req, res);
+      console.log(musicObject)
       break;
   }
 });

@@ -3,6 +3,7 @@
     <Navbar></Navbar>
     <AlbumsList></AlbumsList>
     <CurrentSong></CurrentSong>
+    <SongsList></SongsList>
   </div>
 </template>
 
@@ -10,13 +11,14 @@
 import Navbar from "./components/Navbar.vue";
 import AlbumsList from "./components/AlbumsList";
 import CurrentSong from "./components/CurrentSong";
-
+import SongsList from "./components/SongsList";
 export default {
   name: 'App',
   components: {
     Navbar,
     AlbumsList,
     CurrentSong,
+    SongsList
   }
 }
 </script>

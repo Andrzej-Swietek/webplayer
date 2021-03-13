@@ -2,21 +2,47 @@
   <div class="albums-list">
     <h1>Albums</h1>
 
-    <div v-for="index in 10" :key="index" class="albums-list-element">
-      <img class="mini-img" src="https://images.macrumors.com/t/RsRxUqFqB0mh-vSOEnl0I22oIhg=/1200x1200/smart/article-new/2020/12/apple-music-logo.jpg" alt="mini img">
+<!--    <div v-for="index in 10" :key="index" class="albums-list-element">-->
+<!--      <img class="mini-img" src="https://images.macrumors.com/t/RsRxUqFqB0mh-vSOEnl0I22oIhg=/1200x1200/smart/article-new/2020/12/apple-music-logo.jpg" alt="mini img">-->
+<!--      <div class="desc">-->
+<!--        <h1>Album: {{ index }}</h1>-->
+<!--        <h2>Zespół: XXX</h2>-->
+<!--      </div>-->
+<!--    </div>-->
+
+    <div v-for="cover in covers" :key="cover" class="albums-list-element">
+<!--      <img class="mini-img" src="https://images.macrumors.com/t/RsRxUqFqB0mh-vSOEnl0I22oIhg=/1200x1200/smart/article-new/2020/12/apple-music-logo.jpg" alt="mini img">-->
+      <img class="mini-img" :src="getImage(cover)" alt="mini img">
       <div class="desc">
-        <h1>Album: {{ index }}</h1>
-        <h2>Zespół: XXX</h2>
+        <h1>{{ cover.split('/')[0].split('-').pop() }}</h1>
+        <h2>Zespół: {{ cover.split('/')[0].split('-')[0] }}</h2>
       </div>
     </div>
-
 
   </div>
 </template>
 
 <script>
 export default {
-name: "AlbumsList"
+name: "AlbumsList",
+  data() {
+    return {
+      staticEndpoint: 'http://localhost:3000/'
+    }
+  },
+  methods: {
+    getImage: function (cover) {
+      return this.staticEndpoint + cover;
+    }
+  },
+  computed: {
+    covers() {
+      return this.$store.getters.getCoversGetter;
+    }
+  },
+  mounted() {
+    this.$store.dispatch("fetchCovers");
+  }
 }
 </script>
 
@@ -29,6 +55,9 @@ name: "AlbumsList"
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.56);
     justify-self: flex-start;
     overflow: scroll;
+    position: fixed;
+    left: 1rem;
+    z-index: 99999;
   }
   .albums-list-element {
     height: 20vh;
@@ -71,6 +100,10 @@ name: "AlbumsList"
     font-size: 2rem;
     font-weight: 800;
     width: 100%;
+
+    overflow: hidden; /* make sure it hides the content that overflows */
+    white-space: nowrap; /* don't break the line */
+    text-overflow: ellipsis; /* give the beautiful '...' effect */
   }
   .albums-list-element .desc > h2 {
     font-size: 1.2rem;

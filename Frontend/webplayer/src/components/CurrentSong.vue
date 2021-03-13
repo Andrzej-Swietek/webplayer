@@ -37,6 +37,7 @@ name: "CurrentSong"
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap');
   .currentSong {
     width: 70%;
+    width: 100%;
     height: 90vh;
     background: #000;
     font-family: 'Nunito', sans-serif;
