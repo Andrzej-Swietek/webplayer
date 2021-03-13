@@ -76,7 +76,7 @@ const servResponse = (req, res) => {
     const finish = qs.parse(allData);
 
     res.writeHead(200, { 'Content-Type': 'text/plain;charset=utf-8' });
-    console.log(finish)
+    // console.log(finish)
     if (finish.coversRequest) {
       // WYSYŁANIE OKŁADEK
       res.end(JSON.stringify(musicObject.covers));
@@ -155,7 +155,11 @@ const servResponse = (req, res) => {
 
 const server = http.createServer((req, res) => {
   // przesyłanie konkretnych plików do klienta
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Request-Method', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+  res.setHeader('Access-Control-Allow-Headers', '*');
 
   switch (req.method) {
     case 'GET':
@@ -224,7 +228,9 @@ const server = http.createServer((req, res) => {
       break;
 
     case 'POST':
+      console.log("URL: ", req.url)
       servResponse(req, res);
+
       console.log(musicObject)
       break;
   }
