@@ -18,7 +18,7 @@
 <!--         <h2 class="file-weight">10MB</h2>-->
 <!--      </div>-->
 <!--    </div>-->
-    <div v-for="song in songList" :key="song.name" class="songs-list-element">
+    <div v-for="song in songList" :key="song.name" class="songs-list-element" @click="changeNowPlaying(getTitle(song))">
       <div class="desc">
         <h1>{{ getAlbum(song) }}</h1>
         <h2 class="band">{{getBand(song)}}</h2>
@@ -43,6 +43,10 @@ export default {
     getTitle: (song)=> song.name.split('-')[1],
     getBand: (song)=> song.name.split('-')[2].split('.')[0] ,
     getAlbum: (song) => song.name.split('-')[0],
+    changeNowPlaying: function(song) {
+      // alert(song)
+      this.$store.commit("NOW_PLAYING", song);
+    }
   }
 }
 </script>
@@ -103,7 +107,7 @@ h1 {
 .songs-list-element .desc > h1 {
   font-size: 1.2rem;
   font-weight: 900;
-  width: 40%;
+  min-width: 30%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -114,7 +118,7 @@ h1 {
 .songs-list-element .desc > h2 {
   font-size: 1.2rem;
   font-weight: 400;
-  width: 20%;
+  min-width: 20%;
   margin: 1rem;
   text-align: center;
 }

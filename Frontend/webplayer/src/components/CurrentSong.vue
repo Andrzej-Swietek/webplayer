@@ -8,13 +8,18 @@
         <img src="https://c4.wallpaperflare.com/wallpaper/531/951/621/digital-digital-art-artwork-illustration-minimalism-hd-wallpaper-preview.jpg" alt="">
       </div>
       <div id="player">
-        <div id="songTitle">Title</div>
+        <div id="songTitle"> {{this.$store.getters.getNowPlaying}}</div>
         <div id="buttons">
           <div id="prev"><i class="fa fa-arrow-left"></i></div>
-          <div id="play"><i class="fa fa-play"></i></div>
+          <div id="pause" @click="pause" v-if="isPlaying" ><i class="fa fa-pause"></i></div>
+          <div id="play" @click="play" v-else><i class="fa fa-play"></i></div>
           <div id="next"><i class="fa fa-arrow-right"></i></div>
         </div>
-
+        <audio id="audio" controls>
+          <source src="http://3ia2.spec.pl.hostingasp.pl/xsound/acdc.mp3"
+                   id="audio_src"
+                   type="audio/mp3" />
+        </audio>
         <div id="seek-bar">
           <div id="fill"></div>
           <div id="handle"></div>
@@ -28,7 +33,22 @@
 
 <script>
 export default {
-name: "CurrentSong"
+name: "CurrentSong",
+  data(){
+    return {
+      isPlaying: false,
+    }
+  },
+  methods: {
+    play: function () {
+      document.getElementById("audio").play(); // graj plik mp3
+      this.isPlaying = !this.isPlaying
+    },
+    pause: function () {
+      document.getElementById("audio").pause(); // pauzuj granie
+      this.isPlaying = !this.isPlaying
+    }
+  }
 }
 </script>
 
@@ -125,7 +145,7 @@ name: "CurrentSong"
     background-color: #2b2b2b;
   }
 
-  #play {
+  #play,#pause {
     width: 3rem;
     height: 3rem;
     cursor: pointer;
@@ -140,5 +160,12 @@ name: "CurrentSong"
   #play:hover {
     border: 3px solid #00ea02;;
     color: #00ea02;
+  }
+  #pause:hover {
+    border: 3px solid #dd2450;;
+    color: #dd2450;
+  }
+  audio {
+    display: none;
   }
 </style>

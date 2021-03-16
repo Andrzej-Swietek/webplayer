@@ -35,7 +35,7 @@ name: "AlbumsList",
       return this.staticEndpoint + cover;
     },
     reqAlbum: function(album) {
-      alert(album.split('/')[0]);
+      // alert(album.split('/')[0]);
       let albumName = album.split('/')[0];
       console.log(albumName)
       this.$store.commit("REQ", albumName);

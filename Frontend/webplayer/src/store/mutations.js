@@ -17,7 +17,11 @@ const mutations = {
 
     REQ(state, album){
         state.req = album;
-    }
+    },
+
+    NOW_PLAYING(state, song){
+        state.nowPlaying = song;
+    },
 
 }
 
