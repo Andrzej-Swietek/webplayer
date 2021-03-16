@@ -19,6 +19,12 @@ export default {
     AlbumsList,
     CurrentSong,
     SongsList
+  },
+  methods: {
+
+  },
+  mounted() {
+    this.$store.dispatch("fetchFirst");
   }
 }
 </script>

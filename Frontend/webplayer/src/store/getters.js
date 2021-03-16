@@ -3,7 +3,8 @@ const getters = {
         return state.albums
     },
 
-    getCoversGetter: (state)=> state.covers
+    getCoversGetter: (state)=> state.covers,
+    getCurrentAlbumGetter: (state)=> state.currentAlbum,
 
 
     // kolejne gettery...

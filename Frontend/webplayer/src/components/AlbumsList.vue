@@ -10,7 +10,7 @@
 <!--      </div>-->
 <!--    </div>-->
 
-    <div v-for="cover in covers" :key="cover" class="albums-list-element">
+    <div v-for="cover in covers" :key="cover" @click="reqAlbum(cover)" class="albums-list-element">
 <!--      <img class="mini-img" src="https://images.macrumors.com/t/RsRxUqFqB0mh-vSOEnl0I22oIhg=/1200x1200/smart/article-new/2020/12/apple-music-logo.jpg" alt="mini img">-->
       <img class="mini-img" :src="getImage(cover)" alt="mini img">
       <div class="desc">
@@ -33,7 +33,10 @@ name: "AlbumsList",
   methods: {
     getImage: function (cover) {
       return this.staticEndpoint + cover;
-    }
+    },
+    reqAlbum: (album)=> {
+      alert(album.split('/')[0]);
+    },
   },
   computed: {
     covers() {

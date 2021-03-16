@@ -10,12 +10,20 @@
         <h2 class="file-weight">Size</h2>
 
     </div>
-    <div v-for="index in 10" :key="index" class="songs-list-element">
-       <div class="desc">
-        <h1>Album {{ index }}</h1>
-        <h2 class="band">Zespół</h2>
-        <h2 class="title">Leaves From Vine</h2>
-         <h2 class="file-weight">10MB</h2>
+<!--    <div v-for="index in 10" :key="index" class="songs-list-element">-->
+<!--       <div class="desc">-->
+<!--        <h1>Album {{ index }}</h1>-->
+<!--        <h2 class="band">Zespół</h2>-->
+<!--        <h2 class="title">Leaves From Vine</h2>-->
+<!--         <h2 class="file-weight">10MB</h2>-->
+<!--      </div>-->
+<!--    </div>-->
+    <div v-for="song in songList" :key="song" class="songs-list-element">
+      <div class="desc">
+        <h1>{{ getAlbum(song) }}</h1>
+        <h2 class="band">{{getBand(song)}}</h2>
+        <h2 class="title">{{getTitle(song)}}</h2>
+        <h2 class="file-weight">{{song.size}}</h2>
       </div>
     </div>
 
@@ -25,7 +33,17 @@
 
 <script>
 export default {
-  name: "SongsList"
+  name: "SongsList",
+  computed: {
+    songList() {
+      return this.$store.getters.getCurrentAlbumGetter;
+    }
+  },
+  methods: {
+    getTitle: (song)=> song.name.split('-')[1],
+    getBand: (song)=> song.name.split('-')[2].split('.')[0] ,
+    getAlbum: (song) => song.name.split('-')[0],
+  }
 }
 </script>
 

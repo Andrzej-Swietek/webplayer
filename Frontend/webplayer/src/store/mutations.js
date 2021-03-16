@@ -9,6 +9,10 @@ const mutations = {
 
     COVERS_MUTATIONS(state, covers){
         state.covers = covers
+    },
+
+    FIRST_MUTATIONS(state, album){
+        state.currentAlbum = album
     }
 
 }
