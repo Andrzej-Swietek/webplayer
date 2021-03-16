@@ -76,8 +76,8 @@ const servResponse = (req, res) => {
     const finish = qs.parse(allData);
 
     res.writeHead(200, { 'Content-Type': 'text/plain;charset=utf-8' });
-    // console.log(finish)
     if (finish.coversRequest) {
+      console.log("REQ")
       // WYSYŁANIE OKŁADEK
       res.end(JSON.stringify(musicObject.covers));
     }
@@ -115,7 +115,7 @@ const servResponse = (req, res) => {
       let currentIndex = musicObject.currentListen.findIndex(song => song.name == current);
       if (finish.returnSong == 'prev') {
         //* POPRZEDNIA
-        // możemy jechać do tyłu, ale obecny index musi być o 1 większy od ostatniego w tablicy
+        // możemy jechać do tyłu, ale obecny index musi być o 1 większy od ostatniego w tablicy
         if (currentIndex == 0) currentIndex = musicObject.currentListen.length;
         const previousSong = musicObject.currentListen[currentIndex - 1];
         const newSrc = `/${previousSong.album}/${previousSong.name}`;
@@ -178,6 +178,11 @@ const server = http.createServer((req, res) => {
             res.end();
           });
           break;
+
+        case '/tmp':
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(musicObject.covers));
+          break
 
         case 'css':
           fs.readFile('static' + request, (error, data) => {
