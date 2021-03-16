@@ -13,6 +13,10 @@ const mutations = {
 
     FIRST_MUTATIONS(state, album){
         state.currentAlbum = album
+    },
+
+    REQ(state, album){
+        state.req = album;
     }
 
 }

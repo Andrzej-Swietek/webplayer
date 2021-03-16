@@ -17,8 +17,12 @@ const actions = {
     async fetchFirst({commit}) {
         const res = await axios.post('http://localhost:3000/', querystring.stringify({ albumName: 'first' }) );
         commit('FIRST_MUTATIONS', res.data)
-    }
+    },
 
+    async fetchAlbumName({commit}){
+        const res = await axios.post('http://localhost:3000/', querystring.stringify({ albumName: this.state.req }) );
+        commit('FIRST_MUTATIONS', res.data)
+    }
 }
 
 export default actions

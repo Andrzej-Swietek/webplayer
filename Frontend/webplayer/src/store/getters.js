@@ -5,7 +5,7 @@ const getters = {
 
     getCoversGetter: (state)=> state.covers,
     getCurrentAlbumGetter: (state)=> state.currentAlbum,
-
+    getReq: (state)=> state.req,
 
     // kolejne gettery...
 

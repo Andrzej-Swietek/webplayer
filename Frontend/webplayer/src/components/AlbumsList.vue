@@ -15,7 +15,7 @@
       <img class="mini-img" :src="getImage(cover)" alt="mini img">
       <div class="desc">
         <h1>{{ cover.split('/')[0].split('-').pop() }}</h1>
-        <h2>Zespół: {{ cover.split('/')[0].split('-')[0] }}</h2>
+        <h2>Artist: {{ cover.split('/')[0].split('-')[0] }}</h2>
       </div>
     </div>
 
@@ -27,16 +27,22 @@ export default {
 name: "AlbumsList",
   data() {
     return {
-      staticEndpoint: 'http://localhost:3000/'
+      staticEndpoint: 'http://localhost:3000/',
     }
   },
   methods: {
     getImage: function (cover) {
       return this.staticEndpoint + cover;
     },
-    reqAlbum: (album)=> {
+    reqAlbum: function(album) {
       alert(album.split('/')[0]);
+      let albumName = album.split('/')[0];
+      console.log(albumName)
+      this.$store.commit("REQ", albumName);
+      this.$store.dispatch("fetchAlbumName")
     },
+
+
   },
   computed: {
     covers() {

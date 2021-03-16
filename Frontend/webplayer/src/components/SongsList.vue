@@ -18,7 +18,7 @@
 <!--         <h2 class="file-weight">10MB</h2>-->
 <!--      </div>-->
 <!--    </div>-->
-    <div v-for="song in songList" :key="song" class="songs-list-element">
+    <div v-for="song in songList" :key="song.name" class="songs-list-element">
       <div class="desc">
         <h1>{{ getAlbum(song) }}</h1>
         <h2 class="band">{{getBand(song)}}</h2>
