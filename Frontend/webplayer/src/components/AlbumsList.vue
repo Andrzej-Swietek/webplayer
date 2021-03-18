@@ -2,6 +2,7 @@
   <div class="albums-list">
     <h1>Albums</h1>
 
+
 <!--    <div v-for="index in 10" :key="index" class="albums-list-element">-->
 <!--      <img class="mini-img" src="https://images.macrumors.com/t/RsRxUqFqB0mh-vSOEnl0I22oIhg=/1200x1200/smart/article-new/2020/12/apple-music-logo.jpg" alt="mini img">-->
 <!--      <div class="desc">-->
@@ -41,8 +42,6 @@ name: "AlbumsList",
       this.$store.commit("REQ", albumName);
       this.$store.dispatch("fetchAlbumName")
     },
-
-
   },
   computed: {
     covers() {
@@ -123,5 +122,13 @@ name: "AlbumsList",
   h1 {
     color: azure;
     margin: 1rem;
+  }
+  @media (max-width: 600px) {
+    .albums-list{
+      width: 100%;
+      height: 100vh;
+      left: 0;
+      z-index: 100000;
+    }
   }
 </style>

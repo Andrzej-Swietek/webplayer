@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <Navbar></Navbar>
-    <AlbumsList></AlbumsList>
+    <div @click="hamburgerClick" class="hamburger"><h1><i class="fa fa-bars"></i></h1></div>
+    <AlbumsList v-if="albumsExtended"></AlbumsList>
+    <div @click="songListToggle" class="songListHamburger"><h1><i class="fa fa-music"></i></h1></div>
     <CurrentSong></CurrentSong>
-    <SongsList></SongsList>
+    <SongsList v-if="songsExtended"></SongsList>
   </div>
 </template>
 
@@ -20,8 +22,19 @@ export default {
     CurrentSong,
     SongsList
   },
+  data(){
+    return{
+      albumsExtended: true,
+      songsExtended: true
+    }
+  },
   methods: {
-
+    hamburgerClick: function () {
+      this.albumsExtended = !this.albumsExtended;
+    },
+    songListToggle: function () {
+      this.songsExtended = !this.songsExtended;
+    }
   },
   mounted() {
     this.$store.dispatch("fetchFirst");
@@ -63,4 +76,37 @@ export default {
     text-align: center;
     color: #2c3e50;
   }
+  .hamburger,
+  .songListHamburger {
+    display: none;
+  }
+  @media (max-width: 600px) {
+    .hamburger {
+      display: flex;
+      justify-content: flex-start;
+      position: absolute;
+
+      width: auto;
+      top: 1rem;
+      left: 3rem;
+      color: white;
+      z-index: 900000;
+      cursor: pointer;
+      margin: 0;
+    }
+    .songListHamburger {
+      display: flex;
+      justify-content: flex-end;
+      position: absolute;
+
+      width: auto;
+      top: 1rem;
+      right: 3rem;
+      color: white;
+      z-index: 900000;
+      cursor: pointer;
+      margin: 0;
+    }
+  }
+
 </style>

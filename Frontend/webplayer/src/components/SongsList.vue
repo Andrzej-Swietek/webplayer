@@ -139,5 +139,12 @@ h1 {
   justify-content: space-between;
   padding: 0 2rem;
 }
-
+@media (max-width: 600px) {
+  .songs-list{
+    width: 100%;
+    height: 100vh;
+    left: 0;
+    z-index: 99999;
+  }
+}
 </style>
