@@ -44,12 +44,14 @@ export default {
     getBand: (song)=> song.name.split('-')[2].split('.')[0] ,
     getAlbum: (song) => song.name.split('-')[0],
     changeNowPlaying: function(song, full) {
+
       console.log(full)
       let path_to_mp3 = full.album +"/"+ full.name;
       let mp3_src = "http://localhost:3000/"+path_to_mp3
+      document.getElementById("audio").pause(); // pauzuj granie
       document.getElementById("audio_src").src = mp3_src;
       document.getElementById("audio").load(); // UWAGA - dopiero w tym momencie powinna być możliwość wylogowania GET-a danego pliku mp3 na serwerze
-
+      document.getElementById("audio").play(); // pauzuj granie
       this.$store.commit("NOW_PLAYING", song);
     }
   }
