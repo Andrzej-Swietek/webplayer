@@ -2,10 +2,15 @@
   <div id="app">
     <Navbar></Navbar>
     <div @click="hamburgerClick" class="hamburger"><h1><i class="fa fa-bars"></i></h1></div>
-    <AlbumsList v-if="albumsExtended"></AlbumsList>
+    <transition name="fade">
+      <AlbumsList v-if="albumsExtended"></AlbumsList>
+    </transition>
     <div @click="songListToggle" class="songListHamburger"><h1><i class="fa fa-music"></i></h1></div>
     <CurrentSong></CurrentSong>
-    <SongsList v-if="songsExtended"></SongsList>
+
+    <transition name="slide-fade">
+      <SongsList v-if="songsExtended"></SongsList>
+    </transition>
   </div>
 </template>
 
@@ -107,6 +112,25 @@ export default {
       cursor: pointer;
       margin: 0;
     }
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
+
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+    /* .slide-fade-leave-active below version 2.1.8 */ {
+    transform: translateX(10px);
+    opacity: 0;
   }
 
 </style>

@@ -18,7 +18,7 @@
 <!--         <h2 class="file-weight">10MB</h2>-->
 <!--      </div>-->
 <!--    </div>-->
-    <div v-for="song in songList" :key="song.name" class="songs-list-element" @click="changeNowPlaying(getTitle(song))">
+    <div v-for="song in songList" :key="song.name" class="songs-list-element" @click="changeNowPlaying(getTitle(song),song)">
       <div class="desc">
         <h1>{{ getAlbum(song) }}</h1>
         <h2 class="band">{{getBand(song)}}</h2>
@@ -43,8 +43,13 @@ export default {
     getTitle: (song)=> song.name.split('-')[1],
     getBand: (song)=> song.name.split('-')[2].split('.')[0] ,
     getAlbum: (song) => song.name.split('-')[0],
-    changeNowPlaying: function(song) {
-      // alert(song)
+    changeNowPlaying: function(song, full) {
+      console.log(full)
+      let path_to_mp3 = full.album +"/"+ full.name;
+      let mp3_src = "http://localhost:3000/"+path_to_mp3
+      document.getElementById("audio_src").src = mp3_src;
+      document.getElementById("audio").load(); // UWAGA - dopiero w tym momencie powinna być możliwość wylogowania GET-a danego pliku mp3 na serwerze
+
       this.$store.commit("NOW_PLAYING", song);
     }
   }
