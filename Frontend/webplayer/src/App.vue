@@ -25,7 +25,7 @@ export default {
     Navbar,
     AlbumsList,
     CurrentSong,
-    SongsList
+    SongsList,
   },
   data(){
     return{
@@ -43,6 +43,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("fetchFirst");
+    this.$store.dispatch("getPlaylist");
   }
 }
 </script>

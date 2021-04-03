@@ -2,24 +2,19 @@
   <div class="songs-list">
     <h1>Songs</h1>
 
-    <div class="songs-list-element no-hover flex-between">
-
-        <h2>Album</h2>
-        <h2 class="band">Band</h2>
-        <h2 class="title">Title</h2>
-        <h2 class="file-weight">Size</h2>
-
-    </div>
-<!--    <div v-for="index in 10" :key="index" class="songs-list-element">-->
-<!--       <div class="desc">-->
-<!--        <h1>Album {{ index }}</h1>-->
-<!--        <h2 class="band">Zespół</h2>-->
-<!--        <h2 class="title">Leaves From Vine</h2>-->
-<!--         <h2 class="file-weight">10MB</h2>-->
-<!--      </div>-->
-<!--    </div>-->
-    <div v-for="song in songList" :key="song.name" class="songs-list-element" @click="changeNowPlaying(getTitle(song),song)">
+    <div class="songs-list-element no-hover">
+      <div class="playListIcon"> <i class="fas fa-music"></i> </div>
       <div class="desc">
+        <h1> Album </h1>
+        <h2 class="band"> Band </h2>
+        <h2 class="title"> Title </h2>
+        <h2 class="file-weight"> Size </h2>
+      </div>
+    </div>
+
+    <div v-for="song in songList" :key="song.name" class="songs-list-element" >
+      <div class="addToPlayList" @click="addToPlayList(song)"> <i class="far fa-heart"></i> </div>
+      <div class="desc" @click="changeNowPlaying(getTitle(song),song)">
         <h1>{{ getAlbum(song) }}</h1>
         <h2 class="band">{{getBand(song)}}</h2>
         <h2 class="title">{{getTitle(song)}}</h2>
@@ -54,6 +49,13 @@ export default {
       document.getElementById("audio").play(); // pauzuj granie
       this.$store.commit("NOW_PLAYING", song);
       this.$store.commit('TOGGLE_IS_PLAYING', true)
+    },
+    addToPlayList: function (song){
+      console.log(song.album)
+      console.log(song.name)
+      console.log(song.size)
+      let payload = {'album': song.album, 'name': song.name, 'size': song.size}
+      this.$store.dispatch('addToPlayList',payload)
     }
   }
 }
@@ -104,7 +106,7 @@ h1 {
 }
 
 .songs-list-element .desc {
-  width: 100%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,5 +156,14 @@ h1 {
     left: 0;
     z-index: 99999;
   }
+}
+.playListIcon,
+.addToPlayList {
+  color: white;
+  font-size: 2rem;
+  transition: .5s;
+}
+.addToPlayList:hover {
+  color: #dd2450;
 }
 </style>

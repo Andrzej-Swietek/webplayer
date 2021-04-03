@@ -3,6 +3,17 @@ const http = require('http');
 const fs = require('fs');
 const qs = require('querystring');
 
+
+// |=====================[ DATABASE ]=====================|
+const Datastore = require('nedb');
+
+// |=====================[ DB INIT ]=====================|
+let collection = new Datastore({
+  filename: 'db/database.db',
+  autoload: true
+});
+// |=====================[ / DB INIT ]===================|
+
 // inicjacja obiektu z danymi muzycznymi
 const musicObject = {
   covers: [],
@@ -61,6 +72,23 @@ fs.readdir(__dirname + '/static/mp3/', (err, dirs) => {
     musicObject.currentOpen = tracks;
   });
 });
+
+
+collection.find({ }, function (err, docs) {
+  //zwracam dane w postaci JSON
+  console.log("----- tablica obiektów pobrana z bazy: \n")
+  console.log(docs)
+  docs.forEach( row =>{
+    const { album, name, size } = row;
+      musicObject.playlist.push({ album: album, name: name, size: size });
+  })
+  console.log("----- sformatowany z wcięciami obiekt JSON: \n")
+  console.log(JSON.stringify({ "docsy": docs }, null, 5))
+});
+
+
+
+
 
 // obsługa zapytania POST
 const servResponse = (req, res) => {
@@ -137,6 +165,13 @@ const servResponse = (req, res) => {
     else if (finish.addToPlaylist) {
       const { album, name, size } = finish;
 
+      let doc = {
+        album: album,
+        name: name,
+        size: size
+      };
+
+
       // sprawdzanie czy piosenka nie jest już w playliście
       let isInPlaylist = false;
       musicObject.playlist.forEach(song => {
@@ -148,6 +183,16 @@ const servResponse = (req, res) => {
       if (isInPlaylist) return res.end('już jest w playliście');
 
       musicObject.playlist.push({ album: album, name: name, size: size });
+
+      //|=====================[ Push do Bazy ]=====================|
+
+      collection.insert(doc, function (err, newDoc) {
+        console.log("dodano dokument (obiekt):")
+        console.log(newDoc)
+        console.log("losowe id dokumentu: "+newDoc._id)
+      });
+
+
       res.end('dodano do playlisty');
     }
   });

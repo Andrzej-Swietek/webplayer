@@ -25,6 +25,9 @@ const mutations = {
 
     TOGGLE_IS_PLAYING(state, isItActually){
         state.isPlaying = isItActually;
+    },
+    UPDATE_PLAYLIST(state, list){
+        state.playlist = list
     }
 
 }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 // axios.defaults.baseURL = '//localhost:3000/';
-var querystring = require('querystring');
+const querystring = require('querystring');
 
 const actions = {
     async fetchApiAction({ commit }) {
@@ -29,10 +29,16 @@ const actions = {
         commit('FIRST_MUTATIONS', res.data)
     },
 
-    // async addToPlayList({commit}){
-        // const res = await axios.post('http://localhost:3000/', querystring.stringify({ addToPlaylist: true, album: album, name: name, size: size }) );
-        // commit('FIRST_MUTATIONS', res.data)
-    // },
+    async getPlaylist({commit}){
+        const res = await axios.post('http://localhost:3000/', querystring.stringify({ albumName: 'playlist' }) );
+        commit('UPDATE_PLAYLIST', res.data)
+    },
+
+    async addToPlayList({ dispatch },payload){
+        const res = await axios.post('http://localhost:3000/', querystring.stringify({ addToPlaylist: true, album: payload.album, name: payload.name, size: payload.size }) );
+        console.log("DODANO:  ", res.data)
+        dispatch('getPlaylist')
+        },
 }
 
 export default actions

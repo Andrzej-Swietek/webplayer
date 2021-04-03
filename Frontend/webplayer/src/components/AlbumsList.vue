@@ -1,31 +1,24 @@
 <template>
   <div class="albums-list">
     <h1>Albums</h1>
-
-
-<!--    <div v-for="index in 10" :key="index" class="albums-list-element">-->
-<!--      <img class="mini-img" src="https://images.macrumors.com/t/RsRxUqFqB0mh-vSOEnl0I22oIhg=/1200x1200/smart/article-new/2020/12/apple-music-logo.jpg" alt="mini img">-->
-<!--      <div class="desc">-->
-<!--        <h1>Album: {{ index }}</h1>-->
-<!--        <h2>Zespół: XXX</h2>-->
-<!--      </div>-->
-<!--    </div>-->
-
+    <Playlist></Playlist>
     <div v-for="cover in covers" :key="cover" @click="reqAlbum(cover)" class="albums-list-element">
-<!--      <img class="mini-img" src="https://images.macrumors.com/t/RsRxUqFqB0mh-vSOEnl0I22oIhg=/1200x1200/smart/article-new/2020/12/apple-music-logo.jpg" alt="mini img">-->
       <img class="mini-img" :src="getImage(cover)" alt="mini img">
       <div class="desc">
         <h1>{{ cover.split('/')[0].split('-').pop() }}</h1>
         <h2>Artist: {{ cover.split('/')[0].split('-')[0] }}</h2>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
+import Playlist from "./Playlist";
 export default {
 name: "AlbumsList",
+  components: {
+    Playlist
+  },
   data() {
     return {
       staticEndpoint: 'http://localhost:3000/',

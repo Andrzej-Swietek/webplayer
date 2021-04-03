@@ -7,7 +7,8 @@ const getters = {
     getCurrentAlbumGetter: (state)=> state.currentAlbum,
     getReq: (state) => state.req,
     getNowPlaying: (state) => state.nowPlaying,
-    isPlayingNow: (state) => state.isPlaying
+    isPlayingNow: (state) => state.isPlaying,
+    getPlaylist: (state) => state.playlist
 
     // kolejne gettery...
 

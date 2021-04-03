@@ -5,6 +5,7 @@ const state = {
     req:'',
     nowPlaying: '',
     isPlaying: false,
+    playlist: [],
 }
 
 export default state
