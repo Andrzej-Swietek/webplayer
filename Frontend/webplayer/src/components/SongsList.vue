@@ -53,6 +53,7 @@ export default {
       document.getElementById("audio").load(); // UWAGA - dopiero w tym momencie powinna być możliwość wylogowania GET-a danego pliku mp3 na serwerze
       document.getElementById("audio").play(); // pauzuj granie
       this.$store.commit("NOW_PLAYING", song);
+      this.$store.commit('TOGGLE_IS_PLAYING', true)
     }
   }
 }

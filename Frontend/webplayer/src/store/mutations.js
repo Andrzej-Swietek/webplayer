@@ -23,6 +23,10 @@ const mutations = {
         state.nowPlaying = song;
     },
 
+    TOGGLE_IS_PLAYING(state, isItActually){
+        state.isPlaying = isItActually;
+    }
+
 }
 
 export default mutations

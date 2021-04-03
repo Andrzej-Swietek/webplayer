@@ -11,7 +11,7 @@
         <div id="songTitle"> {{this.$store.getters.getNowPlaying}}</div>
         <div id="buttons">
           <div id="prev"><i class="fa fa-arrow-left"></i></div>
-          <div id="pause" @click="pause" v-if="isPlaying" ><i class="fa fa-pause"></i></div>
+          <div id="pause" @click="pause" v-if="this.$store.state.isPlaying" ><i class="fa fa-pause"></i></div>
           <div id="play" @click="play" v-else><i class="fa fa-play"></i></div>
           <div id="next"><i class="fa fa-arrow-right"></i></div>
         </div>
@@ -47,11 +47,12 @@ name: "CurrentSong",
   methods: {
     play: function () {
       document.getElementById("audio").play(); // graj plik mp3
-      this.isPlaying = !this.isPlaying
+      this.$store.commit('TOGGLE_IS_PLAYING', true)
+      console.log(this.$store.state.isPlaying)
     },
     pause: function () {
       document.getElementById("audio").pause(); // pauzuj granie
-      this.isPlaying = !this.isPlaying
+      this.$store.commit('TOGGLE_IS_PLAYING', false)
     },
   },
   mounted() {

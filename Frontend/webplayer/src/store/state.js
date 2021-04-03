@@ -3,7 +3,8 @@ const state = {
     covers: [],
     currentAlbum: [],
     req:'',
-    nowPlaying: ''
+    nowPlaying: '',
+    isPlaying: false,
 }
 
 export default state

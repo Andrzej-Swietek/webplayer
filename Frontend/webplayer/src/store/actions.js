@@ -22,7 +22,17 @@ const actions = {
     async fetchAlbumName({commit}){
         const res = await axios.post('http://localhost:3000/', querystring.stringify({ albumName: this.state.req }) );
         commit('FIRST_MUTATIONS', res.data)
-    }
+    },
+
+    async fetchNextSong({commit}){
+        const res = await axios.post('http://localhost:3000/', querystring.stringify({ albumName: this.state.req }) );
+        commit('FIRST_MUTATIONS', res.data)
+    },
+
+    // async addToPlayList({commit}){
+        // const res = await axios.post('http://localhost:3000/', querystring.stringify({ addToPlaylist: true, album: album, name: name, size: size }) );
+        // commit('FIRST_MUTATIONS', res.data)
+    // },
 }
 
 export default actions
