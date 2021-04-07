@@ -8,7 +8,8 @@ const getters = {
     getReq: (state) => state.req,
     getNowPlaying: (state) => state.nowPlaying,
     isPlayingNow: (state) => state.isPlaying,
-    getPlaylist: (state) => state.playlist
+    getPlaylist: (state) => state.playlist,
+    getTimer: (state) => state.timer
 
     // kolejne gettery...
 

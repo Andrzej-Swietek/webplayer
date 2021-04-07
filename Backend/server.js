@@ -2,6 +2,7 @@ const PORT = 3000;
 const http = require('http');
 const fs = require('fs');
 const qs = require('querystring');
+const formidable = require("formidable")
 
 
 // |=====================[ DATABASE ]=====================|
@@ -121,7 +122,7 @@ const servResponse = (req, res) => {
         res.end(JSON.stringify(musicObject.playlist));
       }
       else {
-        // w przeciwnym razie wysyłamy mu to co sobie zażyczył
+        // w przeciwnym razie wysyłamy to co sobie zażyczył
         readAlbum(finish.albumName).then(tracks => {
           res.end(JSON.stringify(tracks));
         });
@@ -198,6 +199,26 @@ const servResponse = (req, res) => {
   });
 };
 
+
+const servResponseUpload = (req,res) => {
+  let allData = "";
+
+  req.on("data", function (data) {
+    console.log("data: " + data)
+    allData += data;
+  })
+
+
+  req.on("end", function (data) {
+    let finish = qs.parse(allData)
+    let plik = finish.name;
+    console.log("==============================?>",finish.name)
+    // res.writeHead(200, {"Content-Type": "text/plain"});
+    // res.end(`${plik}`)
+    // res.end("Odsyłam do przeglądarki" + JSON.stringify(finish));
+  })
+}
+
 const server = http.createServer((req, res) => {
   // przesyłanie konkretnych plików do klienta
   // Set CORS headers
@@ -273,15 +294,63 @@ const server = http.createServer((req, res) => {
             res.end();
           });
           break;
+
+        case '/admin':
+          fs.readFile('static/admin.html', (error, data) => {
+            if (error) return;
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.write(data);
+            res.end();
+          });
+          break;
       }
       // koniec case'a dla GETa
       break;
 
     case 'POST':
       console.log("URL: ", req.url)
-      servResponse(req, res);
+      if (req.url === '/upload'){
 
-      console.log(musicObject)
+        let form = formidable({})
+        let start = 0;
+        let stop = 0;
+        let total = 0;
+        form.uploadDir = "static/upload/"   // katalog na zuploadowane pliki
+        form.keepExtensions = true          // zapis z rozszerzeniem pliku
+        form.multiples = true
+
+        form.on("file", function () {
+          console.log("file" + new Date().getTime())
+        })
+
+        form.on("progress", function (bytesReceived, bytesExpected) {
+          console.log("progress ", bytesExpected, bytesReceived, new Date().getTime())
+        })
+
+        form.on("fileBegin", function (name, value) {
+          // start = new Date().getTime()
+          start = Date.now();
+          console.log("fileBegin: " + start)
+        })
+
+        form.on("end", function () {
+          // stop = new Date().getTime()
+          stop = Date.now();
+          console.log("end: " + stop)
+          total = (stop-start);
+          console.log('Czas załadowania pliku na server w [s]', total )
+        })
+
+        form.parse(req, function (err, fields, files) {
+          // servResponseUpload(req, res)
+          console.log(files);
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ fields, files }, null, 2));
+        });
+      } else{
+        servResponse(req, res);
+        console.log(musicObject)
+      }
       break;
   }
 });

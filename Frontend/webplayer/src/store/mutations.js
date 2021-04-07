@@ -28,6 +28,10 @@ const mutations = {
     },
     UPDATE_PLAYLIST(state, list){
         state.playlist = list
+    },
+
+    SET_TIMER(state, timeObject){
+        state.timer = {max: timeObject.max, current: timeObject.current}
     }
 
 }

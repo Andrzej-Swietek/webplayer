@@ -13,6 +13,7 @@
   "author": "Andrzej Świętek",
   "license": "MIT",
   "dependencies": {
+    "formidable": "^1.2.2",
     "nedb": "^1.8.0"
   }
 }

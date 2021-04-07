@@ -23,6 +23,7 @@
                    id="audio_src"
                    type="audio/mp3" />
         </audio>
+        <SongProgress></SongProgress>
         <div id="seek-bar">
           <div id="fill"></div>
           <div id="handle"></div>
@@ -35,8 +36,13 @@
 </template>
 
 <script>
+import SongProgress from "./SongProgress";
+
 export default {
-name: "CurrentSong",
+  name: "CurrentSong",
+  components:{
+    SongProgress
+  },
   data(){
     return {
       isPlaying: false,
@@ -94,6 +100,7 @@ name: "CurrentSong",
 
   .main {
     width: 25%;
+    height: auto;
     background: #fff;
     border-radius: 15px;
 
@@ -121,8 +128,7 @@ name: "CurrentSong",
     font-family: monospace;
     font-size: 18px;
     position: absolute;
-
-    top: 60%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%,-50%);
   }
@@ -130,7 +136,7 @@ name: "CurrentSong",
   #buttons {
     height: 50px;
     width: 100%;
-    margin-top: 50px;
+    margin-top: 75px;
     position: relative;
     top: 10%;
     left: 50%;
@@ -182,7 +188,7 @@ name: "CurrentSong",
     display: none;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     .main {
       width: 75%;
     }

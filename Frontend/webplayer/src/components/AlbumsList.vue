@@ -116,7 +116,7 @@ name: "AlbumsList",
     color: azure;
     margin: 1rem;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     .albums-list{
       width: 100%;
       height: 100vh;

@@ -46,7 +46,17 @@ export default {
       document.getElementById("audio").pause(); // pauzuj granie
       document.getElementById("audio_src").src = mp3_src;
       document.getElementById("audio").load(); // UWAGA - dopiero w tym momencie powinna być możliwość wylogowania GET-a danego pliku mp3 na serwerze
-      document.getElementById("audio").play(); // pauzuj granie
+
+      this.$store.commit("SET_TIMER", {max: document.getElementById("audio").duration, current:0});
+
+      document.getElementById("audio").play();
+
+      document.getElementById('songProgress').min = 0;
+      document.getElementById('songProgress').value = 0;
+      document.getElementById('songProgress').step = 1;
+      document.getElementById('songProgress').max = Math.floor( document.getElementById("audio").duration ).toString();
+      console.log(document.getElementById('audio'),document.getElementById('songProgress').max)
+
       this.$store.commit("NOW_PLAYING", song);
       this.$store.commit('TOGGLE_IS_PLAYING', true)
     },
@@ -149,12 +159,26 @@ h1 {
   justify-content: space-between;
   padding: 0 2rem;
 }
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .songs-list{
     width: 100%;
     height: 100vh;
     left: 0;
     z-index: 99999;
+  }
+}
+@media (min-width: 701px) and (max-width: 1200px) {
+  .songs-list {
+    font-size: 1rem;
+  }
+  .songs-list > * {
+    font-size: 1rem;
+  }
+  .songs-list > h1 {
+    font-size: 2rem;
+  }
+  .songs-list .playListIcon{
+    font-size: 1.5rem;
   }
 }
 .playListIcon,

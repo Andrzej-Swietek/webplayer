@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Pagel</title>
+    <link rel="stylesheet" href="/scss/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="nav" id="dragHere">
+    <h1>Upload Files</h1>
+    <div class="note">
+        <h2> Please, mind file nomenclature: </h2>
+        <pre>[Album Name] - Title - Artist.mp3
+cover.jpg</pre>
+    </div>
+</div>
+<div class="uploadedCollection">
+    <div class="song">
+        <i class="far fa-file-audio"></i><p>[Album Name] - Title - Artist.mp3</p>
+    </div>
+    <div class="song">
+        <i class="far fa-images"></i><p>cover.jpg</p>
+    </div>
+</div>
+<script>
+    document.querySelector("html").ondragover = function (e) {
+        console.log("dragover nad dokumentem html")
+        e.preventDefault(); // usuwa domyślne zachowanie strony po wykonaniu zdarzenia, warto zakomentować i sprawdzić
+        e.stopPropagation(); // zatrzymuje dalszą propagację zdarzenia, warto zakomentować i sprawdzić
+    }
+
+
+    document.querySelector("html").ondrop = function (e) {
+        console.log("drop na dokumencie html")
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    document.querySelector("#dragHere").ondrop = function (e) {
+
+        console.log("drop na divie")
+        e.stopPropagation();
+        e.preventDefault();
+
+        let files = e.dataTransfer.files;
+        console.log(files)
+
+        // teraz utwórz obiekt FormData zastępujący formularz - patrz poprzednie lekcje z uploadem
+        // oraz dodaj do niego po kolei wszystkie pliki z powyższej listy files
+        // na koniec użyj dowolnej technologii do uploadu pliku/ów - patrz poprzednie lekcje
+        let fd = new FormData();
+        // files.forEach( function (i, file) {
+        //     fd.append('file', file);
+        // });
+        $.each(files, function (i, file) {
+            fd.append('file', file);
+        });
+        $.ajax({
+            url: '/upload',
+            type: 'POST',
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                console.log(response)
+                // tutaj pokaż obrazek w img lub div
+                // którego nazwa przyszła z serwer-a
+            },
+
+        })
+    }
+
+    document.querySelector("#dragHere").ondragenter = function (e) {
+        console.log("drag enter na divie")
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
+
+    document.querySelector("#dragHere").ondragover = function (e) {
+        console.log("drag over na divie")
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
+    document.querySelector("#dragHere").ondragleave = function (e) {
+        console.log("dragleave na divie")
+        e.stopPropagation();
+        e.preventDefault();
+
+    }
+</script>
+</body>
+</html>
