@@ -18,9 +18,10 @@ export default {
   },
   methods:{
     setSongTimer: function (e){
-      console.log(e.target.value, document.getElementById("audio").currentTime, document.getElementById("audio").duration )
-      document.getElementById("audio").currentTime = e.target.value;
-      this.$store.commit("SET_TIMER", {max: document.getElementById("audio").duration, current: document.getElementById("audio").currentTime});
+      console.log('SELECTED ON RANGE INPUT', e.target.value, typeof(e.target.value))
+      document.getElementById("audio").currentTime = parseInt(e.target.value);
+      this.$store.commit("SET_TIMER", {max: document.getElementById("audio").duration, current: e.target.value});
+      console.log( 'WHAT U GET',document.getElementById("audio").currentTime, this.$store.getters.getTimer )
     },
     formatTimers: (time) => {
       return ( time.toString().length<2 )? "0"+time : time;
