@@ -29,6 +29,13 @@ export default {
     formatTimers: (time) => {
       return ( time.toString().length<2 )? "0"+time : time;
     }
+  },
+  mounted() {
+    document.getElementById("audio").ontimeupdate = function(e) {
+      console.log(e.target.currentTime);
+      // this.$store.commit("SET_TIMER", { max: document.getElementById("audio").duration, current: parseInt(e.target.currentTime) });
+      document.getElementById("songProgress").value = e.target.currentTime;
+    };
   }
 }
 </script>
