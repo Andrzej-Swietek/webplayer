@@ -16,9 +16,6 @@
           <div id="next"><i class="fa fa-arrow-right"></i></div>
         </div>
         <audio id="audio" controls>
-<!--          <source :src="mp3_src"-->
-<!--                   id="audio_src"-->
-<!--                   type="audio/mp3" />-->
           <source src="http://localhost:3000/Ed%20Sheeran%20-%20Divide%20(2017)/Divide%20-%20Perfect%20-%20Ed%20Sheeran.mp3"
                    id="audio_src"
                    type="audio/mp3" />

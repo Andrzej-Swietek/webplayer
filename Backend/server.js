@@ -280,7 +280,9 @@ const server = http.createServer((req, res) => {
         case 'mp3':
           fs.readFile('static/mp3' + request, (error, data) => {
             if (error) return;
-            res.writeHead(200, { 'Content-Type': 'audio/mpeg' });
+
+            let stats = fs.statSync('static/mp3' + request)
+            res.writeHead(200, { 'Content-Type': 'audio/mpeg',"Content-Length": stats.size, "Accept-Ranges": "bytes" });
             res.write(data);
             res.end();
           });

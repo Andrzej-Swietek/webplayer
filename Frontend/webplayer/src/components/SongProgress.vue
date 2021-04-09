@@ -1,6 +1,7 @@
 <template>
   <div>
     <input id="songProgress" class="songProgressbar" type="range" @change="setSongTimer" />
+<!--    <input id="songProgress" class="songProgressbar" type="range" v-on:input="setSongTimer($event)" />-->
     <div><span>{{ formatTimers(currentMinutes) }}</span>:<span>{{ formatTimers(currentSeconds) }}</span> / <span>{{ formatTimers(maxMinutes) }}</span>:<span>{{ formatTimers(maxSeconds) }}</span></div>
   </div>
 </template>
@@ -19,9 +20,11 @@ export default {
   methods:{
     setSongTimer: function (e){
       console.log('SELECTED ON RANGE INPUT', e.target.value, typeof(e.target.value))
+
       document.getElementById("audio").currentTime = parseInt(e.target.value);
-      this.$store.commit("SET_TIMER", {max: document.getElementById("audio").duration, current: e.target.value});
-      console.log( 'WHAT U GET',document.getElementById("audio").currentTime, this.$store.getters.getTimer )
+      this.$store.commit("SET_TIMER", { max: document.getElementById("audio").duration, current: parseInt(e.target.value) });
+
+      console.log( 'WHAT U GET',document.getElementById("audio").currentTime," and in Store", this.$store.getters.getTimer.current, this.$store.getters.getTimer.max )
     },
     formatTimers: (time) => {
       return ( time.toString().length<2 )? "0"+time : time;
