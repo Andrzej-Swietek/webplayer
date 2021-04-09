@@ -77,6 +77,9 @@ h1 {
   margin: 0 1rem;
 }
 
+
+
+
 .h-auto {
   height: auto;
   flex-flow: column;
@@ -124,5 +127,13 @@ h1 {
   /* .slide-fade-leave-active below version 2.1.8 */ {
   transform: translateX(10px);
   opacity: 0;
+}
+@media (min-width: 701px) and (max-width: 1200px){
+  h1  {
+    font-size: 1.2rem;
+  }
+  h3 {
+    font-size: 1rem;
+  }
 }
 </style>

@@ -185,7 +185,7 @@ export default {
     display: none;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 1024px) {
     .main {
       width: 75%;
     }

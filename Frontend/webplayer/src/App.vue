@@ -86,7 +86,7 @@ export default {
   .songListHamburger {
     display: none;
   }
-  @media (max-width: 700px) {
+  @media (max-width: 1024px) {
     .hamburger {
       display: flex;
       justify-content: flex-start;

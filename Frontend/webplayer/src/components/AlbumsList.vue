@@ -116,12 +116,21 @@ name: "AlbumsList",
     color: azure;
     margin: 1rem;
   }
-  @media (max-width: 700px) {
+  @media (max-width: 1024px) {
     .albums-list{
       width: 100%;
       height: 100vh;
       left: 0;
       z-index: 100000;
+    }
+  }
+
+  @media (min-width: 701px) and (max-width: 1200px) {
+    .albums-list-element {
+      flex-flow: row nowrap;
+    }
+    .albums-list-element .desc {
+      margin-right: 0;
     }
   }
 </style>
