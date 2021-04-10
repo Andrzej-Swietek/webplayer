@@ -21,9 +21,9 @@ cover.jpg</pre>
 </div>
 <div class="uploadedCollection">
     <div class="song">
-        <i class="far fa-file-audio"></i><p>[Album Name] - Title - Artist.mp3</p>
+        <i class="far fa-file-audio"></i><p>[Album Name] - [Title] - [Artist].mp3</p>
     </div>
-    <div class="song">
+    <div class="song bold-border-bottom">
         <i class="far fa-images"></i><p>cover.jpg</p>
     </div>
 </div>
@@ -67,8 +67,21 @@ cover.jpg</pre>
             processData: false,
             success: function (response) {
                 console.log(response)
+                const files = response.files.file
+                console.log("%c",'color:orange',files)
                 // tutaj pokaż obrazek w img lub div
                 // którego nazwa przyszła z serwer-a
+                files.forEach( file =>{
+                    // Pudujemy nasz komponent
+                    let div = $('<div class="song">');
+                    let icon = $(`<i class="far ${ ( file.name.split('.')[1] === 'mp3')? 'fa-file-audio':'fa-images' }">`);
+                    let paragraph = $(`<p>`);
+                    paragraph.text(`${ file.name }`)
+
+                    div.append(icon);
+                    div.append(paragraph);
+                    $('.uploadedCollection').append(div)
+                })
             },
 
         })

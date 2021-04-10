@@ -74,5 +74,11 @@ body {
       color: $primary_color;
       margin-right: 2rem;
     }
+
+  &.bold-border-bottom {
+    border-bottom: solid $primary_color 3px;
+  }
   }
 }
+
+

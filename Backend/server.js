@@ -3,8 +3,8 @@ const http = require('http');
 const fs = require('fs');
 const qs = require('querystring');
 const formidable = require("formidable")
-
-
+const utils = require('./utils.js')
+const path = require("path");
 // |=====================[ DATABASE ]=====================|
 const Datastore = require('nedb');
 
@@ -77,16 +77,15 @@ fs.readdir(__dirname + '/static/mp3/', (err, dirs) => {
 
 collection.find({ }, function (err, docs) {
   //zwracam dane w postaci JSON
-  console.log("----- tablica obiektów pobrana z bazy: \n")
-  console.log(docs)
+  // console.log("----- tablica obiektów pobrana z bazy: \n")
+  // console.log(docs)
   docs.forEach( row =>{
     const { album, name, size } = row;
       musicObject.playlist.push({ album: album, name: name, size: size });
   })
-  console.log("----- sformatowany z wcięciami obiekt JSON: \n")
-  console.log(JSON.stringify({ "docsy": docs }, null, 5))
+  // console.log("----- sformatowany z wcięciami obiekt JSON: \n")
+  // console.log(JSON.stringify({ "docsy": docs }, null, 5))
 });
-
 
 
 
@@ -317,7 +316,12 @@ const server = http.createServer((req, res) => {
         let start = 0;
         let stop = 0;
         let total = 0;
-        form.uploadDir = "static/upload/"   // katalog na zuploadowane pliki
+        let dir = './static/upload/album-'+utils.getCurrentDate();
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir);
+        }
+        // form.uploadDir = "static/upload/"   // katalog na zuploadowane pliki
+        form.uploadDir = dir  // katalog na zuploadowane pliki
         form.keepExtensions = true          // zapis z rozszerzeniem pliku
         form.multiples = true
 
@@ -344,14 +348,27 @@ const server = http.createServer((req, res) => {
         })
 
         form.parse(req, function (err, fields, files) {
-          // servResponseUpload(req, res)
-          console.log(files);
+          console.log("FILES =>>>>>>>", files);
+          files.file.forEach( f=>{
+            fs.rename('./'+f.path, form.uploadDir +'/'+ f.name, function(err) {
+              if (err)
+                throw err;
+              console.log('renamed complete');
+            });
+          })
+          // fs.rename(files.file.path, form.uploadDir +'/'+ files.file.name, function(err) {
+          //   if (err)
+          //     throw err;
+          //   console.log('renamed complete');
+          // });
+
+
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ fields, files }, null, 2));
         });
       } else{
         servResponse(req, res);
-        console.log(musicObject)
+        // console.log(musicObject)
       }
       break;
   }
