@@ -179,6 +179,9 @@ h1 {
     left: 0;
     z-index: 99999;
   }
+  .songs-list > h1 {
+    font-size: 1.5rem;
+  }
 }
 @media (min-width: 701px) and (max-width: 1200px) {
   .songs-list {

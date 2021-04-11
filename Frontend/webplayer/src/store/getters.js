@@ -12,7 +12,8 @@ const getters = {
     getTimer: (state) => state.timer,
 
     getUploadedAlbums: (state) => state.uploadedAlbums,
-    getUploadedCovers: (state) => state.uploadedCovers
+    getUploadedCovers: (state) => state.uploadedCovers,
+    getShouldUploadedBeShown: (state) => state.shouldUploadedBeShown
 
     // kolejne gettery...
 

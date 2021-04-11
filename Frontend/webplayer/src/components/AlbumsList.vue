@@ -35,7 +35,8 @@ name: "AlbumsList",
       let albumName = album.split('/')[0];
       console.log(albumName)
       this.$store.commit("REQ", albumName);
-      this.$store.dispatch("fetchAlbumName")
+      this.$store.dispatch("fetchAlbumName");
+      this.$store.commit('TOGGLE_ALBUM_UPLOAD',false);
     },
   },
   computed: {

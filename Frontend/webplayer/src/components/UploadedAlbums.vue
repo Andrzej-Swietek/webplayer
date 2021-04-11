@@ -27,7 +27,8 @@ export default {
       console.log(albumName)
       this.$store.commit("REQ", albumName);
       // this.$store.dispatch("fetchAlbumName")
-      this.$store.dispatch("fetchAlbumNameUploaded")
+      this.$store.dispatch("fetchAlbumNameUploaded");
+      this.$store.commit('TOGGLE_ALBUM_UPLOAD',true);
     },
   },
   computed: {
@@ -107,7 +108,7 @@ export default {
   @media (max-width: 1024px) {
     .uploadedListElement{
       width: 100%;
-      height: 100vh;
+      height: 20vh;
       left: 0;
       z-index: 100000;
     }

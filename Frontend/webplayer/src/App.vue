@@ -11,6 +11,7 @@
     <transition name="slide-fade">
       <SongsList v-if="songsExtended"></SongsList>
     </transition>
+    <UploadedSongList v-if="this.$store.getters.getShouldUploadedBeShown && songsExtended"></UploadedSongList>
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import Navbar from "./components/Navbar.vue";
 import AlbumsList from "./components/AlbumsList";
 import CurrentSong from "./components/CurrentSong";
 import SongsList from "./components/SongsList";
+import UploadedSongList from "./components/UploadedSongList";
 export default {
   name: 'App',
   components: {
@@ -26,6 +28,7 @@ export default {
     AlbumsList,
     CurrentSong,
     SongsList,
+    UploadedSongList
   },
   data(){
     return{

@@ -22,20 +22,20 @@
       </div>
     </div>
 
-    <UploadedSongList></UploadedSongList>
+<!--    <UploadedSongList></UploadedSongList>-->
 
 
   </div>
 </template>
 
 <script>
-import UploadedSongList from "./UploadedSongList";
+// import UploadedSongList from "./UploadedSongList";
 
 export default {
   name: "SongsList",
-  components:{
-    UploadedSongList
-  },
+  // components:{
+  //   UploadedSongList
+  // },
   computed: {
     songList() {
       return this.$store.getters.getCurrentAlbumGetter;

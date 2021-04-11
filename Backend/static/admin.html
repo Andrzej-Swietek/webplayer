@@ -71,6 +71,7 @@ cover.jpg</pre>
                 console.log("%c",'color:orange',files)
                 // tutaj pokaż obrazek w img lub div
                 // którego nazwa przyszła z serwer-a
+                $('.uploadedCollection').empty();
                 files.forEach( file =>{
                     // Pudujemy nasz komponent
                     let div = $('<div class="song">');

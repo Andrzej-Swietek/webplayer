@@ -8,6 +8,7 @@ const state = {
     playlist: [],
     timer: {max: 0, current:0},
 
+    shouldUploadedBeShown: false,
     uploadedAlbums: [],
     uploadedCovers: [],
 }

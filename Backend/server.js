@@ -420,10 +420,9 @@ const server = http.createServer((req, res) => {
         if (!fs.existsSync(dir)) {
           fs.mkdirSync(dir);
         }
-        // form.uploadDir = "static/upload/"   // katalog na zuploadowane pliki
-        form.uploadDir = dir  // katalog na zuploadowane pliki
+        form.uploadDir = dir                // katalog na zuploadowane pliki
         form.keepExtensions = true          // zapis z rozszerzeniem pliku
-        form.multiples = true
+        form.multiples = true               // Wiele plików naraz
 
         form.on("file", function () {
           console.log("file" + new Date().getTime())
@@ -449,20 +448,22 @@ const server = http.createServer((req, res) => {
 
         form.parse(req, function (err, fields, files) {
           console.log("FILES =>>>>>>>", files);
+          // Sprawdzam czy jest okładka
+          let coverIncluded = false;
+          files.file.forEach( f=>{ if (f.name === 'cover.jpg') coverIncluded = true });
+          if (!coverIncluded){
+            fs.copyFile('./static/img/cover.jpg', form.uploadDir +'/cover.jpg', (err) => {
+              if (err) throw err;
+              console.log('source.txt was copied to destination.txt');
+            });
+          }
           files.file.forEach( f=>{
             fs.rename('./'+f.path, form.uploadDir +'/'+ f.name, function(err) {
               if (err)
                 throw err;
               console.log('renamed complete');
             });
-          })
-          // fs.rename(files.file.path, form.uploadDir +'/'+ files.file.name, function(err) {
-          //   if (err)
-          //     throw err;
-          //   console.log('renamed complete');
-          // });
-
-
+          });
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ fields, files }, null, 2));
         });

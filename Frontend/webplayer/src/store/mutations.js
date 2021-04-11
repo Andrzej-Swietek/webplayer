@@ -41,6 +41,10 @@ const mutations = {
     UPLOADED_COVERS_MUTATIONS(state, covers){
         state.uploadedCovers = covers
     },
+
+    TOGGLE_ALBUM_UPLOAD(state,value){
+        state.shouldUploadedBeShown = value
+    }
 }
 
 export default mutations
