@@ -59,6 +59,14 @@ export default {
       document.getElementById("audio").pause(); // pauzuj granie
       this.$store.commit('TOGGLE_IS_PLAYING', false);
     },
+    getDuration: async function() {
+      return new Promise(function(resolve) {
+        let audio = document.getElementById("audio")
+        audio.addEventListener("loadedmetadata", function(){
+          resolve(audio.duration);
+        });
+      });
+    },
     nextSong: async function() {
       document.getElementById("audio").pause();
       let payload = {
@@ -73,6 +81,18 @@ export default {
       document.getElementById("audio_src").src = this.mp3_src;
       document.getElementById("audio").load();
       document.getElementById("audio").play();
+
+      document.getElementById('songProgress').min = 0;
+      document.getElementById('songProgress').value = 0;
+      document.getElementById('songProgress').step = 1;
+
+      this.$store.commit("NOW_PLAYING",decodeURI(document.getElementById("audio_src").src).split('/')[4].split('-')[1] );
+      this.$store.commit('TOGGLE_IS_PLAYING', true)
+
+      let duration = await this.getDuration()
+      this.$store.commit("SET_TIMER", {max: duration, current: 0});
+      document.getElementById('songProgress').max = Math.floor(duration).toString();
+      console.log(duration)
     },
     prevSong: async function () {
       document.getElementById("audio").pause();
@@ -89,6 +109,17 @@ export default {
       document.getElementById("audio_src").src = this.mp3_src;
       document.getElementById("audio").load();
       document.getElementById("audio").play();
+
+      document.getElementById('songProgress').min = 0;
+      document.getElementById('songProgress').value = 0;
+      document.getElementById('songProgress').step = 1;
+      this.$store.commit("NOW_PLAYING",decodeURI(document.getElementById("audio_src").src).split('/')[4].split('-')[1] );
+      this.$store.commit('TOGGLE_IS_PLAYING', true)
+
+      let duration = await this.getDuration()
+      this.$store.commit("SET_TIMER", {max: duration, current: 0});
+      document.getElementById('songProgress').max = Math.floor(duration).toString();
+      console.log(duration)
     }
   },
   mounted() {
