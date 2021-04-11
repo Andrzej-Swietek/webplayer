@@ -136,4 +136,7 @@ h1 {
     font-size: 1rem;
   }
 }
+h3 {
+  margin: 0 1rem;
+ }
 </style>

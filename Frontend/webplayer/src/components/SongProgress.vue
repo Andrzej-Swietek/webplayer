@@ -32,7 +32,7 @@
        // console.log(e.target.currentTime);
        this.$store.commit("SET_TIMER", { max: this.$store.getters.getTimer.max, current: parseInt(e.target.currentTime) });
        this.time = e.target.currentTime
-       console.log(this.time)
+       // console.log(this.time)
        document.getElementById("songProgress").value = e.target.currentTime;
      }.bind(this);
    },

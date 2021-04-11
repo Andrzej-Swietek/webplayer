@@ -16,6 +16,10 @@
 <script>
 import Playlist from "./Playlist";
 import UploadedAlbums from "./UploadedAlbums";
+import axios from "axios";
+import querystring from "querystring";
+
+
 export default {
 name: "AlbumsList",
   components: {
@@ -31,12 +35,18 @@ name: "AlbumsList",
     getImage: function (cover) {
       return this.staticEndpoint + cover;
     },
-    reqAlbum: function(album) {
+    reqAlbum: async function (album) {
       let albumName = album.split('/')[0];
       console.log(albumName)
       this.$store.commit("REQ", albumName);
-      this.$store.dispatch("fetchAlbumName");
-      this.$store.commit('TOGGLE_ALBUM_UPLOAD',false);
+      await this.$store.dispatch("fetchAlbumName");
+      // this.$store.dispatch("updateListening",{ updateListening: true, listeningAlbumName: albumName });
+      const res = await axios.post('http://localhost:3000/', querystring.stringify({
+        updateListening: true,
+        listeningAlbumName: albumName
+      }));
+      console.log(res)
+      this.$store.commit('TOGGLE_ALBUM_UPLOAD', false);
     },
   },
   computed: {
@@ -53,7 +63,7 @@ name: "AlbumsList",
 <style scoped>
   .albums-list {
     height: 90vh;
-    width: 30%;
+    width: 35%;
     /*background-color: #414141;*/
     background-color: rgb(22,23,27);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.56);

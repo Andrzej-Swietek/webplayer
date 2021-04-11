@@ -10,10 +10,10 @@
       <div id="player">
         <div id="songTitle"> {{this.$store.getters.getNowPlaying}}</div>
         <div id="buttons">
-          <div id="prev"><i class="fa fa-arrow-left"></i></div>
+          <div id="prev" @click="prevSong"><i class="fa fa-arrow-left"></i></div>
           <div id="pause" @click="pause" v-if="this.$store.state.isPlaying" ><i class="fa fa-pause"></i></div>
           <div id="play" @click="play" v-else><i class="fa fa-play"></i></div>
-          <div id="next"><i class="fa fa-arrow-right"></i></div>
+          <div id="next" @click="nextSong"><i class="fa fa-arrow-right"></i></div>
         </div>
         <audio id="audio" controls>
           <source src="http://localhost:3000/Ed%20Sheeran%20-%20Divide%20(2017)/Divide%20-%20Perfect%20-%20Ed%20Sheeran.mp3"
@@ -34,6 +34,8 @@
 
 <script>
 import SongProgress from "./SongProgress";
+import axios from "axios";
+import querystring from "querystring";
 
 export default {
   name: "CurrentSong",
@@ -50,13 +52,44 @@ export default {
   methods: {
     play: function () {
       document.getElementById("audio").play(); // graj plik mp3
-      this.$store.commit('TOGGLE_IS_PLAYING', true)
-      console.log(this.$store.state.isPlaying)
+      this.$store.commit('TOGGLE_IS_PLAYING', true);
+      console.log(this.$store.state.isPlaying);
     },
     pause: function () {
       document.getElementById("audio").pause(); // pauzuj granie
-      this.$store.commit('TOGGLE_IS_PLAYING', false)
+      this.$store.commit('TOGGLE_IS_PLAYING', false);
     },
+    nextSong: async function() {
+      document.getElementById("audio").pause();
+      let payload = {
+        changeSong: true,
+        currentSong: decodeURI(document.getElementById("audio_src").src).split('/')[4],
+        returnSong: 'next'
+      }
+      // let res = await this.$store.dispatch('fetchNextPrevSong', payload)
+      let res = await axios.post('http://localhost:3000/', querystring.stringify({ changeSong: true, currentSong: payload.currentSong, returnSong: payload.returnSong }) );
+      this.mp3_src = "http://localhost:3000/"+res.data
+      console.log('next',res.data);
+      document.getElementById("audio_src").src = this.mp3_src;
+      document.getElementById("audio").load();
+      document.getElementById("audio").play();
+    },
+    prevSong: async function () {
+      document.getElementById("audio").pause();
+      let payload = {
+        changeSong: true,
+        currentSong: decodeURI(document.getElementById("audio_src").src).split('/')[4],
+        returnSong: 'prev'
+      }
+      console.log('prev',payload);
+      // let res = await this.$store.dispatch('fetchNextPrevSong', payload)
+      let res = await axios.post('http://localhost:3000/', querystring.stringify({ changeSong: true, currentSong: payload.currentSong, returnSong: payload.returnSong }) );
+      this.mp3_src = "http://localhost:3000/" + res.data
+      console.log('next', payload, res);
+      document.getElementById("audio_src").src = this.mp3_src;
+      document.getElementById("audio").load();
+      document.getElementById("audio").play();
+    }
   },
   mounted() {
     this.path_to_mp3 = 'Ed%20Sheeran%20-%20Divide%20(2017)/Divide%20-%20Perfect%20-%20Ed%20Sheeran.mp3'

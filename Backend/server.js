@@ -5,6 +5,8 @@ const qs = require('querystring');
 const formidable = require("formidable")
 const utils = require('./utils.js')
 const path = require("path");
+
+
 // |=====================[ DATABASE ]=====================|
 const Datastore = require('nedb');
 
@@ -198,6 +200,7 @@ const servResponse = (req, res) => {
       });
     }
     else if (finish.changeSong) {
+      console.log('finish',finish)
       const current = finish.currentSong;
       let currentIndex = musicObject.currentListen.findIndex(song => song.name == current);
       if (finish.returnSong == 'prev') {
@@ -205,7 +208,7 @@ const servResponse = (req, res) => {
         // możemy jechać do tyłu, ale obecny index musi być o 1 większy od ostatniego w tablicy
         if (currentIndex == 0) currentIndex = musicObject.currentListen.length;
         const previousSong = musicObject.currentListen[currentIndex - 1];
-        const newSrc = `/${previousSong.album}/${previousSong.name}`;
+        const newSrc = `${previousSong.album}/${previousSong.name}`;
         res.end(newSrc);
       } else {
         //* NASTĘPNA
@@ -213,7 +216,7 @@ const servResponse = (req, res) => {
         if (currentIndex == musicObject.currentListen.length - 1) currentIndex = -1;
         const nextSong = musicObject.currentListen[currentIndex + 1];
         try {
-          const newSrc = `/${nextSong.album}/${nextSong.name}`;
+          const newSrc = `${nextSong.album}/${nextSong.name}`;
           res.end(newSrc);
         } catch (err) {
           console.log('wystąpił błąd', err);
@@ -297,6 +300,10 @@ const servResponseUpload = (req,res) => {
   })
 }
 
+
+/**
+ * ==================================== HTTP SERVER OBJECT ====================================
+ */
 const server = http.createServer((req, res) => {
   // przesyłanie konkretnych plików do klienta
   // Set CORS headers
@@ -478,6 +485,8 @@ const server = http.createServer((req, res) => {
       break;
   }
 });
+
+
 
 server.listen(PORT, () => {
   console.log('serwer startuje na porcie ' + PORT);

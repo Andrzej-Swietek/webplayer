@@ -24,9 +24,14 @@ const actions = {
         commit('FIRST_MUTATIONS', res.data)
     },
 
-    async fetchNextSong({commit}){
-        const res = await axios.post('http://localhost:3000/', querystring.stringify({ albumName: this.state.req }) );
-        commit('FIRST_MUTATIONS', res.data)
+    async updateListening(payload){
+        const res = await axios.post('http://localhost:3000/', querystring.stringify({ updateListening: true,listeningAlbumName: payload.listeningAlbumName }) );
+        console.log(res)
+    },
+
+    async fetchNextPrevSong(payload){
+        const res = await axios.post('http://localhost:3000/', querystring.stringify({ changeSong: true, currentSong: payload.currentSong, returnSong: payload.returnSong }) );
+        return res;
     },
 
     async getPlaylist({commit}){
