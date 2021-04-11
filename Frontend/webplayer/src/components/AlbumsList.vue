@@ -9,14 +9,17 @@
         <h2>Artist: {{ cover.split('/')[0].split('-')[0] }}</h2>
       </div>
     </div>
+    <UploadedAlbums></UploadedAlbums>
   </div>
 </template>
 
 <script>
 import Playlist from "./Playlist";
+import UploadedAlbums from "./UploadedAlbums";
 export default {
 name: "AlbumsList",
   components: {
+    UploadedAlbums,
     Playlist
   },
   data() {
@@ -29,7 +32,6 @@ name: "AlbumsList",
       return this.staticEndpoint + cover;
     },
     reqAlbum: function(album) {
-      // alert(album.split('/')[0]);
       let albumName = album.split('/')[0];
       console.log(albumName)
       this.$store.commit("REQ", albumName);
@@ -59,6 +61,9 @@ name: "AlbumsList",
     position: fixed;
     left: 1rem;
     z-index: 99999;
+  }
+  .albums-list::-webkit-scrollbar {
+    display: none;
   }
   .albums-list-element {
     height: 20vh;

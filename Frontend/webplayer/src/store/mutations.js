@@ -32,8 +32,15 @@ const mutations = {
 
     SET_TIMER(state, timeObject){
         state.timer = {max: timeObject.max, current: timeObject.current}
-    }
+    },
 
+    UPLOADED_ALBUMS_MUTATION(state, uploadedAlbums){
+        state.uploadedAlbums = uploadedAlbums
+    },
+
+    UPLOADED_COVERS_MUTATIONS(state, covers){
+        state.uploadedCovers = covers
+    },
 }
 
 export default mutations

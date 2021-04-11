@@ -44,6 +44,7 @@ export default {
   mounted() {
     this.$store.dispatch("fetchFirst");
     this.$store.dispatch("getPlaylist");
+    this.$store.dispatch("fetchCoversUploaded");
   }
 }
 </script>

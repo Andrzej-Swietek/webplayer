@@ -23,7 +23,13 @@ const musicObject = {
   currentOpen: [],
   playlist: []
 };
-
+const musicObjectUploaded = {
+  covers: [],
+  dirs: [],
+  currentListen: [],
+  currentOpen: [],
+  playlist: []
+};
 // czytanie pojedyńczych albumów
 const readAlbum = albumName => {
   return new Promise((resolve, reject) => {
@@ -41,6 +47,35 @@ const readAlbum = albumName => {
         singleTrack.name = file;
 
         const stats = fs.statSync(__dirname + '/static/mp3/' + albumName + '/' + file);
+        singleTrack.size = (stats.size / 1024 / 1024).toFixed(2) + 'MB';
+
+        tracks.push(singleTrack);
+      });
+
+      // aktualizacja listy z obecnymi plikami
+      musicObject.currentOpen = tracks;
+
+      return resolve(tracks);
+    });
+  });
+};
+
+const readAlbumUploaded = albumName => {
+  return new Promise((resolve, reject) => {
+    return fs.readdir(__dirname + '/static/upload/' + albumName, (err, files) => {
+      if (err) {
+        return reject(err);
+      }
+      const tracks = [];
+      files.forEach(file => {
+        if (file.split('.').pop() != 'mp3') return;
+
+        const singleTrack = {};
+
+        singleTrack.album = albumName;
+        singleTrack.name = file;
+
+        const stats = fs.statSync(__dirname + '/static/upload/' + albumName + '/' + file);
         singleTrack.size = (stats.size / 1024 / 1024).toFixed(2) + 'MB';
 
         tracks.push(singleTrack);
@@ -75,6 +110,26 @@ fs.readdir(__dirname + '/static/mp3/', (err, dirs) => {
 });
 
 
+// czytanie folderów z muzyką zuploadowanych przez usera
+fs.readdir(__dirname + '/static/upload/', (err, dirs) => {
+  if (err) {
+    return console.log(err);
+  }
+
+  //dodawanie folderów do tablicy
+  dirs.forEach(dir => {
+    musicObjectUploaded.dirs.push(dir);
+
+    // czytanie okładek
+    musicObjectUploaded.covers.push(dir + '/cover.jpg');
+  });
+
+  // czytanie plików z pierwszego folderu
+  readAlbum(musicObjectUploaded.dirs[0]).then(tracks => {
+    musicObjectUploaded.currentOpen = tracks;
+  });
+});
+
 collection.find({ }, function (err, docs) {
   //zwracam dane w postaci JSON
   // console.log("----- tablica obiektów pobrana z bazy: \n")
@@ -90,7 +145,11 @@ collection.find({ }, function (err, docs) {
 
 
 
-// obsługa zapytania POST
+/**
+ * ========================== RESPONSE FOR DEFAULT ALBUMS REQUESTS ==========================
+ * @param req
+ * @param res
+ */
 const servResponse = (req, res) => {
   console.log(req.method + req.url)
   let allData = '';
@@ -198,6 +257,11 @@ const servResponse = (req, res) => {
   });
 };
 
+/**
+ * ========================== RESPONSE FOR UPLOADED ALBUMS REQUESTS ==========================
+ * @param req
+ * @param res
+ */
 
 const servResponseUpload = (req,res) => {
   let allData = "";
@@ -207,14 +271,29 @@ const servResponseUpload = (req,res) => {
     allData += data;
   })
 
-
   req.on("end", function (data) {
-    let finish = qs.parse(allData)
-    let plik = finish.name;
-    console.log("==============================?>",finish.name)
-    // res.writeHead(200, {"Content-Type": "text/plain"});
-    // res.end(`${plik}`)
-    // res.end("Odsyłam do przeglądarki" + JSON.stringify(finish));
+    let finish = qs.parse(allData);
+    res.writeHead(200, { 'Content-Type': 'text/plain;charset=utf-8' });
+    if (finish.coversRequest) {
+      console.log("REQ")
+      // WYSYŁANIE OKŁADEK
+      res.end(JSON.stringify(musicObjectUploaded.covers));
+    }
+    else if (finish.albumName) {
+      // WYSYŁANIE LISTY Z ALBUMEM
+      if (finish.albumName == 'first') {
+        // jeśli jest to pierwsze żądanie to wysyłamy pierwszy folder do użytkownika
+        readAlbumUploaded(musicObjectUploaded.dirs[0]).then(tracks => {
+          res.end(JSON.stringify(tracks));
+        });
+      }
+      else {
+        // w przeciwnym razie wysyłamy to co sobie zażyczył
+        readAlbumUploaded(finish.albumName).then(tracks => {
+          res.end(JSON.stringify(tracks));
+        });
+      }
+    }
   })
 }
 
@@ -233,7 +312,29 @@ const server = http.createServer((req, res) => {
 
       // rozszerzenie pliku zawsze będzie ostatnim elementem nazwy po kropce
       const extention = request.split('.').pop();
+      console.log(extention)
+      if (request.includes('/upload')){
+        fs.readFile('static' + request, (error, data) => {
+          console.log('>>>>>>>>>> ', request)
+          if (error) return;
+          res.writeHead(200, { 'Content-Type': 'image/jpg' });
+          res.write(data);
+          res.end();
+        });
+      }
+      else if (request.includes('/mp3up/'))
+      {
+        let pathToFile = request.replace('/mp3up/','');
+        console.log(pathToFile)
+        fs.readFile('static/upload/' + pathToFile, (error, data) => {
+          if (error) return;
 
+          let stats = fs.statSync('static/upload/' + pathToFile)
+          res.writeHead(200, { 'Content-Type': 'audio/mpeg',"Content-Length": stats.size, "Accept-Ranges": "bytes" });
+          res.write(data);
+          res.end();
+        });
+      }
       switch (extention) {
         case '/':
           fs.readFile('static/index.html', (error, data) => {
@@ -248,7 +349,6 @@ const server = http.createServer((req, res) => {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify(musicObject.covers));
           break
-
         case 'css':
           fs.readFile('static' + request, (error, data) => {
             if (error) return;
@@ -366,9 +466,13 @@ const server = http.createServer((req, res) => {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ fields, files }, null, 2));
         });
-      } else{
+      }
+      else if (req.url === '/getUploaded'){
+        servResponseUpload(req,res);
+      }
+      else{
         servResponse(req, res);
-        // console.log(musicObject)
+        console.log(musicObject)
       }
       break;
   }

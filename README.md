@@ -1,6 +1,6 @@
 # Web Player
 ___
-## Vue.js | Vuex | Three.js | Vanilla Node.js
+## Vue.js | Vuex | Vanilla Node.js | NEDB
 
 ![img](https://vuex.vuejs.org/vuex.png)
 

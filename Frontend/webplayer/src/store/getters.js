@@ -9,7 +9,10 @@ const getters = {
     getNowPlaying: (state) => state.nowPlaying,
     isPlayingNow: (state) => state.isPlaying,
     getPlaylist: (state) => state.playlist,
-    getTimer: (state) => state.timer
+    getTimer: (state) => state.timer,
+
+    getUploadedAlbums: (state) => state.uploadedAlbums,
+    getUploadedCovers: (state) => state.uploadedCovers
 
     // kolejne gettery...
 

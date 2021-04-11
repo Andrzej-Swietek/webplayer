@@ -7,6 +7,9 @@ const state = {
     isPlaying: false,
     playlist: [],
     timer: {max: 0, current:0},
+
+    uploadedAlbums: [],
+    uploadedCovers: [],
 }
 
 export default state

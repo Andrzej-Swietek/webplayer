@@ -38,7 +38,17 @@ const actions = {
         const res = await axios.post('http://localhost:3000/', querystring.stringify({ addToPlaylist: true, album: payload.album, name: payload.name, size: payload.size }) );
         console.log("DODANO:  ", res.data)
         dispatch('getPlaylist')
-        },
+    },
+
+    async fetchCoversUploaded({commit}) {
+        const res = await axios.post('http://localhost:3000/getUploaded', querystring.stringify({ coversRequest: true }) );
+        commit('UPLOADED_COVERS_MUTATIONS', res.data)
+    },
+
+    async fetchAlbumNameUploaded({commit}){
+        const res = await axios.post('http://localhost:3000/getUploaded', querystring.stringify({ albumName: this.state.req }) );
+        commit('UPLOADED_ALBUMS_MUTATION', res.data)
+    },
 }
 
 export default actions
