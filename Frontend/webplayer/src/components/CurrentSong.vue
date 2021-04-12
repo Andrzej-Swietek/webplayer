@@ -128,6 +128,10 @@ export default {
     console.log(this.mp3_src)
     document.getElementById("audio_src").src = this.mp3_src;
     document.getElementById("audio").load(); // UWAGA - dopiero w tym momencie powinna być możliwość wylogowania GET-a danego pliku mp3 na serwerze
+    document.getElementById("audio").onended = function(e) {
+      console.log("utwór się zakończył, odtwarzam następny",e)
+      return this.nextSong()
+    }.bind(this);
   }
 }
 </script>
