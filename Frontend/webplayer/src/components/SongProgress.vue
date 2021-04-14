@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input id="songProgress" class="songProgressbar" type="range" @change="setSongTimer" />
+    <input id="songProgress" class="songProgressbar" type="range" @mousedown="mouseDown" @input="setSongTimer"  @mouseup="mouseUp"/>
        <div><span>{{ formatTimers(this.$store.getters.getTimer.current) }}</span> / <span>{{ formatTimers(this.$store.getters.getTimer.max) }}</span></div>
 
    </div>
@@ -26,13 +26,19 @@
      formatTimers: (time) => {
        return ` ${Math.floor(time/60)}:${ ( time.toString().length<2 )? "0"+ parseInt(time)%60 : parseInt(time)%60 }` ;
      },
+     mouseDown:function (){
+       if (this.$store.getters.isPlaying)
+          document.getElementById("audio").pause();
+     },
+     mouseUp: function (){
+       if (this.$store.getters.isPlaying)
+          document.getElementById("audio").play();
+     }
    },
    mounted() {
      document.getElementById("audio").ontimeupdate = function(e) {
-       // console.log(e.target.currentTime);
        this.$store.commit("SET_TIMER", { max: this.$store.getters.getTimer.max, current: parseInt(e.target.currentTime) });
        this.time = e.target.currentTime
-       // console.log(this.time)
        document.getElementById("songProgress").value = e.target.currentTime;
      }.bind(this);
    },
