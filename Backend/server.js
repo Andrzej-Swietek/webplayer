@@ -25,13 +25,7 @@ const musicObject = {
   currentOpen: [],
   playlist: []
 };
-const musicObjectUploaded = {
-  covers: [],
-  dirs: [],
-  currentListen: [],
-  currentOpen: [],
-  playlist: []
-};
+
 // czytanie pojedyńczych albumów
 const readAlbum = albumName => {
   return new Promise((resolve, reject) => {
@@ -62,34 +56,6 @@ const readAlbum = albumName => {
   });
 };
 
-const readAlbumUploaded = albumName => {
-  return new Promise((resolve, reject) => {
-    return fs.readdir(__dirname + '/static/upload/' + albumName, (err, files) => {
-      if (err) {
-        return reject(err);
-      }
-      const tracks = [];
-      files.forEach(file => {
-        if (file.split('.').pop() != 'mp3') return;
-
-        const singleTrack = {};
-
-        singleTrack.album = albumName;
-        singleTrack.name = file;
-
-        const stats = fs.statSync(__dirname + '/static/upload/' + albumName + '/' + file);
-        singleTrack.size = (stats.size / 1024 / 1024).toFixed(2) + 'MB';
-
-        tracks.push(singleTrack);
-      });
-
-      // aktualizacja listy z obecnymi plikami
-      musicObject.currentOpen = tracks;
-
-      return resolve(tracks);
-    });
-  });
-};
 
 // czytanie folderów z muzyką
 fs.readdir(__dirname + '/static/mp3/', (err, dirs) => {
@@ -111,26 +77,6 @@ fs.readdir(__dirname + '/static/mp3/', (err, dirs) => {
   });
 });
 
-
-// czytanie folderów z muzyką zuploadowanych przez usera
-fs.readdir(__dirname + '/static/upload/', (err, dirs) => {
-  if (err) {
-    return console.log(err);
-  }
-
-  //dodawanie folderów do tablicy
-  dirs.forEach(dir => {
-    musicObjectUploaded.dirs.push(dir);
-
-    // czytanie okładek
-    musicObjectUploaded.covers.push(dir + '/cover.jpg');
-  });
-
-  // czytanie plików z pierwszego folderu
-  readAlbum(musicObjectUploaded.dirs[0]).then(tracks => {
-    musicObjectUploaded.currentOpen = tracks;
-  });
-});
 
 collection.find({ }, function (err, docs) {
   //zwracam dane w postaci JSON
@@ -260,45 +206,7 @@ const servResponse = (req, res) => {
   });
 };
 
-/**
- * ========================== RESPONSE FOR UPLOADED ALBUMS REQUESTS ==========================
- * @param req
- * @param res
- */
 
-const servResponseUpload = (req,res) => {
-  let allData = "";
-
-  req.on("data", function (data) {
-    console.log("data: " + data)
-    allData += data;
-  })
-
-  req.on("end", function (data) {
-    let finish = qs.parse(allData);
-    res.writeHead(200, { 'Content-Type': 'text/plain;charset=utf-8' });
-    if (finish.coversRequest) {
-      console.log("REQ")
-      // WYSYŁANIE OKŁADEK
-      res.end(JSON.stringify(musicObjectUploaded.covers));
-    }
-    else if (finish.albumName) {
-      // WYSYŁANIE LISTY Z ALBUMEM
-      if (finish.albumName == 'first') {
-        // jeśli jest to pierwsze żądanie to wysyłamy pierwszy folder do użytkownika
-        readAlbumUploaded(musicObjectUploaded.dirs[0]).then(tracks => {
-          res.end(JSON.stringify(tracks));
-        });
-      }
-      else {
-        // w przeciwnym razie wysyłamy to co sobie zażyczył
-        readAlbumUploaded(finish.albumName).then(tracks => {
-          res.end(JSON.stringify(tracks));
-        });
-      }
-    }
-  })
-}
 
 
 /**
@@ -423,7 +331,7 @@ const server = http.createServer((req, res) => {
         let start = 0;
         let stop = 0;
         let total = 0;
-        let dir = './static/upload/album-'+utils.getCurrentDate();
+        let dir = './static/mp3/album_'+utils.getCurrentDate();
         if (!fs.existsSync(dir)) {
           fs.mkdirSync(dir);
         }
@@ -457,14 +365,15 @@ const server = http.createServer((req, res) => {
           console.log("FILES =>>>>>>>", files);
           // Sprawdzam czy jest okładka
           let coverIncluded = false;
-          files.file.forEach( f=>{ if (f.name === 'cover.jpg') coverIncluded = true });
+          let filesArr = files.file.length !== undefined ? files.file : [files.file];
+          filesArr.forEach( f=>{ if (f.name === 'cover.jpg') coverIncluded = true });
           if (!coverIncluded){
             fs.copyFile('./static/img/cover.jpg', form.uploadDir +'/cover.jpg', (err) => {
               if (err) throw err;
-              console.log('source.txt was copied to destination.txt');
+              console.log('Cover was copied to destination');
             });
           }
-          files.file.forEach( f=>{
+          filesArr.forEach( f=>{
             fs.rename('./'+f.path, form.uploadDir +'/'+ f.name, function(err) {
               if (err)
                 throw err;
@@ -474,9 +383,6 @@ const server = http.createServer((req, res) => {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ fields, files }, null, 2));
         });
-      }
-      else if (req.url === '/getUploaded'){
-        servResponseUpload(req,res);
       }
       else{
         servResponse(req, res);

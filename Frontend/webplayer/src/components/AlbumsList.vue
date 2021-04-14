@@ -4,18 +4,22 @@
     <Playlist></Playlist>
     <div v-for="cover in covers" :key="cover" @click="reqAlbum(cover)" class="albums-list-element">
       <img class="mini-img" :src="getImage(cover)" alt="mini img">
-      <div class="desc">
+      <div class="desc" v-if="isUploaded(cover.split('/')[0].split('-')[0])">
+        <h1>{{ formatDate(  cover.split('/')[0].split('-')[0] ) + " " + cover.split('/')[0].split('-').pop() }}</h1>
+        <h2>Uploaded by user</h2>
+      </div>
+      <div class="desc" v-else>
         <h1>{{ cover.split('/')[0].split('-').pop() }}</h1>
         <h2>Artist: {{ cover.split('/')[0].split('-')[0] }}</h2>
       </div>
     </div>
-    <UploadedAlbums></UploadedAlbums>
+<!--    <UploadedAlbums></UploadedAlbums>-->
   </div>
 </template>
 
 <script>
 import Playlist from "./Playlist";
-import UploadedAlbums from "./UploadedAlbums";
+// import UploadedAlbums from "./UploadedAlbums";
 import axios from "axios";
 import querystring from "querystring";
 
@@ -23,7 +27,7 @@ import querystring from "querystring";
 export default {
 name: "AlbumsList",
   components: {
-    UploadedAlbums,
+    // UploadedAlbums,
     Playlist
   },
   data() {
@@ -48,6 +52,13 @@ name: "AlbumsList",
       console.log(res)
       this.$store.commit('TOGGLE_ALBUM_UPLOAD', false);
     },
+    isUploaded: function (album) {
+      console.log(album,album.includes('album_'))
+      return album.includes('album_')
+    },
+    formatDate: function (date){
+      return date.replaceAll('_','-');
+    }
   },
   computed: {
     covers() {

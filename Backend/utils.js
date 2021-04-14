@@ -7,8 +7,9 @@ const utils = {
         const yyyy = today.getFullYear();
         const hh = today.getHours();
         const min = today.getMinutes()
+        const sec = today.getSeconds()
 
-        today = mm + '-' + dd + '-' + yyyy + '_' + hh + '-' + min;
+        today = mm + '_' + dd + '_' + yyyy + '-' + hh + '_' + min + '_'+ sec;
         return today
     },
     b: function () {

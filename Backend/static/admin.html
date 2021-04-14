@@ -67,11 +67,13 @@ cover.jpg</pre>
             processData: false,
             success: function (response) {
                 console.log(response)
-                const files = response.files.file
+                // const files = response.files.file
+                const files = response.files.file.length !== undefined ? response.files.file : [response.files.file];
                 console.log("%c",'color:orange',files)
                 // tutaj pokaż obrazek w img lub div
                 // którego nazwa przyszła z serwer-a
                 $('.uploadedCollection').empty();
+
                 files.forEach( file =>{
                     // Pudujemy nasz komponent
                     let div = $('<div class="song">');
@@ -83,6 +85,7 @@ cover.jpg</pre>
                     div.append(paragraph);
                     $('.uploadedCollection').append(div)
                 })
+
             },
 
         })
