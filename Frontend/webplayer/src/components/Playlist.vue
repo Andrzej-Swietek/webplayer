@@ -30,17 +30,45 @@ export default {
       document.querySelector('.PlayList').classList.toggle('h-auto')
       this.show = (!this.show)
     },
-    changeNowPlaying: function(song, full) {
+    getDuration: async function() {
+      return new Promise(function(resolve) {
+        let audio = document.getElementById("audio")
+        audio.addEventListener("loadedmetadata", function(){
+          resolve(audio.duration);
+        });
+      });
+    },
+    changeNowPlaying: async function (song, full) {
 
-      console.log(full, song)
-      let path_to_mp3 = full.album +"/"+ full.name;
-      let mp3_src = "http://localhost:3000/"+path_to_mp3
+      // console.log(full, song)
+      // let path_to_mp3 = full.album +"/"+ full.name;
+      // let mp3_src = "http://localhost:3000/"+path_to_mp3
+      // document.getElementById("audio").pause(); // pauzuj granie
+      // document.getElementById("audio_src").src = mp3_src;
+      // document.getElementById("audio").load(); // UWAGA - dopiero w tym momencie powinna być możliwość wylogowania GET-a danego pliku mp3 na serwerze
+      // document.getElementById("audio").play(); // pauzuj granie
+      // this.$store.commit("NOW_PLAYING", song);
+      // this.$store.commit('TOGGLE_IS_PLAYING', true)
+      console.log(full)
+      let path_to_mp3 = full.album + "/" + full.name;
+      let mp3_src = "http://localhost:3000/" + path_to_mp3
       document.getElementById("audio").pause(); // pauzuj granie
       document.getElementById("audio_src").src = mp3_src;
       document.getElementById("audio").load(); // UWAGA - dopiero w tym momencie powinna być możliwość wylogowania GET-a danego pliku mp3 na serwerze
-      document.getElementById("audio").play(); // pauzuj granie
+      document.getElementById("audio").play();
+
+      document.getElementById('songProgress').min = 0;
+      document.getElementById('songProgress').value = 0;
+      document.getElementById('songProgress').step = 1;
+
       this.$store.commit("NOW_PLAYING", song);
       this.$store.commit('TOGGLE_IS_PLAYING', true)
+
+      let duration = await this.getDuration()
+      this.$store.commit("SET_TIMER", {max: duration, current: 0});
+
+      document.getElementById('songProgress').max = Math.floor(duration).toString();
+      console.log(duration)
     },
   },
   data(){

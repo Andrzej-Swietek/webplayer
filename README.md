@@ -23,5 +23,14 @@ ___
 ## API Documentation:
 https://documenter.getpostman.com/view/10767901/TzCP8nhv
 
+
+## Link do Aplikacji VUE: 
+https://aswietek-webplayer.netlify.app/
+
+## Link do API: 
+https://webplayer-bakend.herokuapp.com/
+
+## Link do panelu admina: 
+https://webplayer-bakend.herokuapp.com/
 ____
 ### Author: Andrzej Świętek &copy; 2021
